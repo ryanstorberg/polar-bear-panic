@@ -106,15 +106,17 @@ Game.prototype = {
 	    this.game.add.existing(this.bear);
 	    this.game.camera.follow(this.bear);
 
-	    hardRain = this.add.emitter(this.world.centerX, 0, 100);
-	    this.physics.enable(hardRain, Phaser.Physics.ARCADE)
-	    hardRain.width = this.world.width;
-	    hardRain.makeParticles('fish');
-	    hardRain.setYSpeed(300, 500);
-	    hardRain.setXSpeed(-500, -1000);
-	    hardRain.minRotation = 360;
-	    hardRain.maxRotation = 90;
-	    hardRain.start(false, 1600, 5, 0);
+	    hardRain2 = this.add.emitter(this.world.centerX, 0, 50);
+	    this.physics.enable(hardRain2, Phaser.Physics.ARCADE)
+	    hardRain2.width = this.world.width;
+	    hardRain2.makeParticles('fish');
+	    // hardRain3.minParticleScale = 0.2;
+	    // hardRain3.maxParticleScale = 0.4;
+	    hardRain2.setYSpeed(300, 500);
+	    hardRain2.setXSpeed(-500, -1000);
+	    hardRain2.minRotation = 360;
+	    hardRain2.maxRotation = 90;
+	    hardRain2.start(false, 1600, 5, 0);
 
 	    chaser = this.add.sprite(0, 0, 'chaser');
 	   	chaser.animations.add('chase');
@@ -127,17 +129,13 @@ Game.prototype = {
 	},
 
 	update : function() {
-		// this.playerLocations.set("test");
 		var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
-		// playerLocations.on('value', function (snapshot) {
-		//   console.log(snapshot.val());
-		// });
 
 		this.game.physics.arcade.collide(this.bear, layer);
 	    this.game.physics.arcade.collide(this.bear, hardRain);
 	    this.game.physics.arcade.collide(pole, layer);
 
-	    chaser.body.velocity.x = 290;
+	    chaser.body.velocity.x = 0;
 
         if (this.game.physics.arcade.overlap(this.bear, chaser)) {
         	this.bear.die();
@@ -147,28 +145,51 @@ Game.prototype = {
         	this.bear.win();
         }
 
-	    if (cursors.left.isDown) {
-	        this.bear.runLeft();
-	        // this.playerLocation.set();
-	        // playerLocations.set("test");
+        if (cursors.left.isDown) {
+	        // this.bear.runLeft();
+	        playerLocations.set("left");
 
 	    } else if (cursors.right.isDown) {
-	        this.bear.runRight();
-	  		// this.playerLocations.set("this old man");
-	  		// playerLocations.set("test");
+	        // this.bear.runRight();
+	  		playerLocations.set("right");
 
 	    } else {
-	        this.bear.stop();
-	        // this.playerLocation.set();
+	        // this.bear.stop();
+	        playerLocations.set("stop");
 	    }
 
 	    if (cursors.up.isDown && this.bear.body.onFloor()) {
-	        this.bear.jump();
-	        // this.playerLocation.set();
+	        // this.bear.jump();
+	        playerLocations.set("jump");
 	    }
 
 	    if (gameOver === true) {
 	    	// this.game.state.start('MainMenu');
 	    }
+
+        playerLocations.on('value', function (snapshot) {
+
+        	// console.log(snapshot.val());
+
+		  	if (snapshot.val() === "left") {
+		  		console.log("I'm running left");
+	        	// this.bear.runLeft();
+
+	    	} else if (snapshot.val() === "right") {
+	    		console.log("I'm running right");
+	        	// this.bear.runRight();
+
+	    	} else if (snapshot.val() === "stop") {
+	    		console.log("I'm stopping");
+	        	// this.bear.stop();
+
+	    	}
+
+	    	if (snapshot.val() === "jump") {
+	    		console.log("I'm jumping");
+	        	// this.bear.jump();
+
+	    	}
+		});
 	}
 };
