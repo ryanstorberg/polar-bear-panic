@@ -9,6 +9,7 @@ Game = function(game) {
 	iceberg = null;
 	chaser = null;
 	pole = null;
+	// numPlayers = null;
 };
 
 var Bear = function(game, x, y, frame) {
@@ -118,31 +119,51 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
+	    var numPlayers = function(database) {
+		    return database.once("value", function(snapshot) {
+		    	return snapshot.numChildren();
+			});
+		}
+
+		console.log(numPlayers(playerLocations));
+
+		
+
+		// console.log(playerLocationsSnapshot.numChildren());
+
 	    // playerIndex = null;
 
 	    // playerLocations(function(snapshot) {
 	    // 	console.log(snapshot.numChildren);
 	    // })
 
-	    bear = new Bear(this.game, 900, 500);
-		this.game.add.existing(bear);
-		playerLocation = playerLocations.push(0);
-
-		foes = null;
+	 //    bear = new Bear(this.game, 900, 500);
+		// this.game.add.existing(bear);
+		// playerLocation = playerLocations.push(0);
+		// console.log("playerLocations: " + playerLocations);
+		// playerLocations.once("value", function(snapshot) {
+		// 	console.log("playerLocations snapshot: " + snapshot.val());
+		// 	snapshot.forEach(function(challenger) {
+		// 		console.log("challenger: " + challenger);
+		// 		console.log("challenger value: " + challenger.val());
+		// 	})
+		// })
+		
+		// foes = null;
 
 
 
 		// console.log(playerLocations.val());
 
-		playerLocations.once('value', function(snapshot) {
-			snapshot.forEach(function(child) {
-				if (location !== playerLocation) {
-					foes = child;
-					foe1 = new Bear(this.game, 900, 500);
-					this.game.add.existing(foe1);
-				}
-			});
-		});
+		// playerLocations.once('value', function(snapshot) {
+		// 	snapshot.forEach(function(child) {
+		// 		if (location !== playerLocation) {
+		// 			foes = child;
+		// 			foe1 = new Bear(this.game, 900, 500);
+		// 			this.game.add.existing(foe1);
+		// 		}
+		// 	});
+		// });
 
 	 //    playerLocations.on('value', function(snapshot) {
 
@@ -192,39 +213,39 @@ Game.prototype = {
 
 		// });
 
-	    playerLocation.on('value', function(snapshot) {
+	 //    playerLocation.on('value', function(snapshot) {
 
-		  	if (snapshot.val() === 1) {
-	        	bear.runLeft();
+		//   	if (snapshot.val() === 1) {
+	 //        	bear.runLeft();
 
-	    	} else if (snapshot.val() === 2) {
-	        	bear.jump();
+	 //    	} else if (snapshot.val() === 2) {
+	 //        	bear.jump();
 
-	    	} else if (snapshot.val() === 3) {
-	        	bear.runRight();
+	 //    	} else if (snapshot.val() === 3) {
+	 //        	bear.runRight();
 
-	    	} else if (snapshot.val() === 0) {
-	        	bear.stopNow();
+	 //    	} else if (snapshot.val() === 0) {
+	 //        	bear.stopNow();
 
-	    	}
+	 //    	}
 
-		});
+		// });
 
-		foes.on('value', function(snapshot) {
-			if (snapshot.val() === 1) {
-	        	foe1.runLeft();
+		// foes.on('value', function(snapshot) {
+		// 	if (snapshot.val() === 1) {
+	 //        	foe1.runLeft();
 
-	    	} else if (snapshot.val() === 2) {
-	        	foe1.jump();
+	 //    	} else if (snapshot.val() === 2) {
+	 //        	foe1.jump();
 
-	    	} else if (snapshot.val() === 3) {
-	        	foe1.runRight();
+	 //    	} else if (snapshot.val() === 3) {
+	 //        	foe1.runRight();
 
-	    	} else if (snapshot.val() === 0) {
-	        	foe1.stopNow();
+	 //    	} else if (snapshot.val() === 0) {
+	 //        	foe1.stopNow();
 
-	    	}
-		})
+	 //    	}
+		// })
 	},
 
 	update : function() {
@@ -235,31 +256,31 @@ Game.prototype = {
 
 	    chaser.body.velocity.x = 0;
 
-        if (this.game.physics.arcade.overlap(bear, chaser)) {
-        	bear.die();
-        }
+     //    if (this.game.physics.arcade.overlap(bear, chaser)) {
+     //    	bear.die();
+     //    }
 
-        if (this.game.physics.arcade.overlap(bear, pole)) {
-        	bear.win();
-        }
+     //    if (this.game.physics.arcade.overlap(bear, pole)) {
+     //    	bear.win();
+     //    }
 
-        if (cursors.left.isDown) {
+     //    if (cursors.left.isDown) {
 
-	        playerLocation.set(1);
+	    //     playerLocation.set(1);
 
-	    } else if (cursors.up.isDown && bear.body.onFloor()) {
+	    // } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	        playerLocation.set(2);
+	    //     playerLocation.set(2);
 
-	    } else if (cursors.right.isDown) {
+	    // } else if (cursors.right.isDown) {
 
-	  		playerLocation.set(3);
+	  		// playerLocation.set(3);
 
-	    } else {
+	    // } else {
 
-	        playerLocation.set(0);
+	    //     playerLocation.set(0);
 
-	    }
+	    // }
 
 	    this.getActions();
 
