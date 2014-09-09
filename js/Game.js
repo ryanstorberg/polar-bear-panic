@@ -9,6 +9,7 @@ Game = function(game) {
 	iceberg = null;
 	chaser = null;
 	pole = null;
+	// foes = null;
 	// numPlayers = null;
 };
 
@@ -103,7 +104,6 @@ Game.prototype = {
 		playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
 	    this.game.physics.arcade.gravity.y = 300;
 
 	    cursors = this.input.keyboard.createCursorKeys();
@@ -119,17 +119,19 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-        var handleEvent = function(num) {
-        	return num;
-        }
+  //       var handleEvent = function(num) {
+  //       	console.log("I know we have " + num  );
+  //       }
 
-	    var numPlayers = function(database) {
-		    database.once("value", function(snapshot) {
-		    	return handleEvent(snapshot.numChildren());
-			});
-		}
+	 //    var numPlayers = function(database) {
+		//     database.once("value", function(snapshot) {
+		//     	console.log(snapshot.numChildren());
+		//     	handleEvent(snapshot.numChildren());
+		//     	return snapshot.numChildren();
+		// 	});
+		// }
         
-        console.log(numPlayers(playerLocations));
+        // console.log(numPlayers(playerLocations));
 
 	
 		
@@ -142,9 +144,9 @@ Game.prototype = {
 	    // 	console.log(snapshot.numChildren);
 	    // })
 
-	 //    bear = new Bear(this.game, 900, 500);
-		// this.game.add.existing(bear);
-		// playerLocation = playerLocations.push(0);
+	    bear = new Bear(this.game, 900, 500);
+		this.game.add.existing(bear);
+		playerLocation = playerLocations.push(0);
 		// console.log("playerLocations: " + playerLocations);
 		// playerLocations.once("value", function(snapshot) {
 		// 	console.log("playerLocations snapshot: " + snapshot.val());
@@ -154,21 +156,27 @@ Game.prototype = {
 		// 	})
 		// })
 		
-		// foes = null;
+		// foes;
 
 
 
 		// console.log(playerLocations.val());
 
-		// playerLocations.once('value', function(snapshot) {
-		// 	snapshot.forEach(function(child) {
-		// 		if (location !== playerLocation) {
-		// 			foes = child;
-		// 			foe1 = new Bear(this.game, 900, 500);
-		// 			this.game.add.existing(foe1);
-		// 		}
-		// 	});
-		// });
+
+		playerLocations.once('value', function(snapshot) {
+			snapshot.forEach(function(child) {
+				console.log(child);
+				if (child !== playerLocation) {
+					foes = child;
+					
+					foe1 = new Bear(this.game, 900, 500);
+					// debugger
+					this.game.add.existing(foe1);
+				}
+			});
+		});
+
+		// foes;
 
 	 //    playerLocations.on('value', function(snapshot) {
 
@@ -218,25 +226,28 @@ Game.prototype = {
 
 		// });
 
-	 //    playerLocation.on('value', function(snapshot) {
+	    playerLocation.on('value', function(snapshot) {
 
-		//   	if (snapshot.val() === 1) {
-	 //        	bear.runLeft();
+		  	if (snapshot.val() === 1) {
+	        	bear.runLeft();
 
-	 //    	} else if (snapshot.val() === 2) {
-	 //        	bear.jump();
+	    	} else if (snapshot.val() === 2) {
+	        	bear.jump();
 
-	 //    	} else if (snapshot.val() === 3) {
-	 //        	bear.runRight();
+	    	} else if (snapshot.val() === 3) {
+	        	bear.runRight();
 
-	 //    	} else if (snapshot.val() === 0) {
-	 //        	bear.stopNow();
+	    	} else if (snapshot.val() === 0) {
+	        	bear.stopNow();
 
-	 //    	}
+	    	}
 
-		// });
+		});
 
-		// foes.on('value', function(snapshot) {
+		// if (typeof foes === undefined) {
+		// } else {
+		// 	console.log("foes is " + foes);
+		// 	foes.on('value', function(snapshot) {
 		// 	if (snapshot.val() === 1) {
 	 //        	foe1.runLeft();
 
@@ -251,6 +262,7 @@ Game.prototype = {
 
 	 //    	}
 		// })
+	 //    }
 	},
 
 	update : function() {
@@ -261,31 +273,31 @@ Game.prototype = {
 
 	    chaser.body.velocity.x = 0;
 
-     //    if (this.game.physics.arcade.overlap(bear, chaser)) {
-     //    	bear.die();
-     //    }
+        if (this.game.physics.arcade.overlap(bear, chaser)) {
+        	bear.die();
+        }
 
-     //    if (this.game.physics.arcade.overlap(bear, pole)) {
-     //    	bear.win();
-     //    }
+        if (this.game.physics.arcade.overlap(bear, pole)) {
+        	bear.win();
+        }
 
-     //    if (cursors.left.isDown) {
+        if (cursors.left.isDown) {
 
-	    //     playerLocation.set(1);
+	        playerLocation.set(1);
 
-	    // } else if (cursors.up.isDown && bear.body.onFloor()) {
+	    } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	    //     playerLocation.set(2);
+	        playerLocation.set(2);
 
-	    // } else if (cursors.right.isDown) {
+	    } else if (cursors.right.isDown) {
 
-	  		// playerLocation.set(3);
+	  		playerLocation.set(3);
 
-	    // } else {
+	    } else {
 
-	    //     playerLocation.set(0);
+	        playerLocation.set(0);
 
-	    // }
+	    }
 
 	    this.getActions();
 
