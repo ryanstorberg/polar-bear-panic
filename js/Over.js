@@ -9,7 +9,8 @@ Over.prototype = {
 	},
 
 	update: function() {
-		if (this.spacebar.isDown)
+		if (this.spacebar.isDown) {
 			this.game.state.start('Game');
+		}
 	}
 };
