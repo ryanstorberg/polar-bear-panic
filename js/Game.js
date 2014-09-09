@@ -7,7 +7,6 @@ Game = function(game) {
 	bear = null;
 	hardRain = null;
 	iceberg = null;
-	gameOver = false;
 	chaser = null;
 	pole = null;
 };
@@ -119,8 +118,14 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-	    this.bear = new Bear(this.game, 900, 500);
-	    this.game.add.existing(this.bear);
+	    // playerCount = playerLocations.length;
+	    // if (playerCount <= 4) {
+	    	bear = new Bear(this.game, 900, 500);
+	    	this.game.add.existing(bear);
+	    	playerLocations.push({2 : "stop"});
+	    // } els/e {
+	    	//create function
+	    // };
 
 	    snow = this.add.emitter(this.world.centerX, 0, 1000);
 	    this.makeSnow(snow);
@@ -136,26 +141,19 @@ Game.prototype = {
 		},
 
 	getActions : function() {
-		// console.log(this.bear);
-
 	    playerLocations.on('value', function(snapshot) {
-	    	// console.log(this.bear);
 
 		  	if (snapshot.val() === "left") {
-		  		// console.log("left");
-	        	this.bear.runLeft();
+	        	bear.runLeft();
 
 	    	} else if (snapshot.val() === "jump") {
-	    		// console.log("jump");
-	        	this.bear.jump();
+	        	bear.jump();
 
 	    	} else if (snapshot.val() === "right") {
-	    		// console.log("right");
-	        	this.bear.runRight();
+	        	bear.runRight();
 
 	    	} else if (snapshot.val() === "stop") {
-	    		// console.log(this.bear);
-	        	this.bear.stopNow();
+	        	bear.stopNow();
 
 	    	}
 
@@ -164,42 +162,36 @@ Game.prototype = {
 
 	update : function() {
 
-		this.game.physics.arcade.collide(this.bear, layer);
-	    this.game.physics.arcade.collide(this.bear, hardRain);
+		this.game.physics.arcade.collide(bear, layer);
+	    this.game.physics.arcade.collide(bear, hardRain);
 	    this.game.physics.arcade.collide(pole, layer);
 
 	    chaser.body.velocity.x = 0;
 
-        if (this.game.physics.arcade.overlap(this.bear, chaser)) {
-        	this.bear.die();
+        if (this.game.physics.arcade.overlap(bear, chaser)) {
+        	bear.die();
         }
 
-        if (this.game.physics.arcade.overlap(this.bear, pole)) {
-        	this.bear.win();
+        if (this.game.physics.arcade.overlap(bear, pole)) {
+        	bear.win();
         }
 
         if (cursors.left.isDown) {
 
-	        playerLocations.set("left");
+	        playerLocations.update({2:"left"});
 
-	    } else if (cursors.up.isDown && this.bear.body.onFloor()) {
+	    } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	        playerLocations.set("jump");
+	        playerLocations.update({2:"jump"});
 
 	    } else if (cursors.right.isDown) {
 
-	  		playerLocations.set("right");
+	  		playerLocations.update({2:"right"});
 
 	    } else {
 
-	        playerLocations.set("stop");
+	        playerLocations.update({2:"stop"});
 
-	    }
-
-	    
-
-	    if (gameOver === true) {
-	    	// this.game.state.start('MainMenu');
 	    }
 
 	    this.getActions();
