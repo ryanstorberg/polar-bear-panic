@@ -118,35 +118,59 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-	    playerIndex = null;
+	    // playerIndex = null;
 
-	    playerLocations.on('value', function(snapshot) {
+	    // playerLocations(function(snapshot) {
+	    // 	console.log(snapshot.numChildren);
+	    // })
 
-		  	if (snapshot.val()[0] === 0) {
-		  		bear = new Bear(this.game, 900, 500);
-		  		this.game.add.existing(bear);
-		  		playerIndex = 0;
+	    bear = new Bear(this.game, 900, 500);
+		this.game.add.existing(bear);
+		playerLocation = playerLocations.push(0);
 
-	    	} else if (snapshot.val()[1] === 0) {
-	    		bear = new Bear(this.game, 900, 500);
-	    		this.game.add.existing(bear);
-	    		playerIndex = 1;
+		foes = null;
 
-	    	} else if (snapshot.val()[2] === 0) {
-	    		bear = new Bear(this.game, 900, 500);
-	    		this.game.add.existing(bear);
-	    		playerIndex = 2;
 
-	    	} else if (snapshot.val()[3] === 0) {
-	    		bear = new Bear(this.game, 900, 500);
-	    		this.game.add.existing(bear);
-	    		playerIndex = 3;
 
-	    	} else {
+		// console.log(playerLocations.val());
 
-	    	}
-
+		playerLocations.once('value', function(snapshot) {
+			snapshot.forEach(function(child) {
+				if (location !== playerLocation) {
+					foes = child;
+					foe1 = new Bear(this.game, 900, 500);
+					this.game.add.existing(foe1);
+				}
+			});
 		});
+
+	 //    playerLocations.on('value', function(snapshot) {
+
+		//   	if (snapshot.val()[0] === 0) {
+		//   		bear = new Bear(this.game, 900, 500);
+		//   		this.game.add.existing(bear);
+		//   		// playerIndex = 0;
+
+	 //    	} else if (snapshot.val()[1] === 0) {
+	 //    		bear = new Bear(this.game, 900, 500);
+	 //    		this.game.add.existing(bear);
+	 //    		playerIndex = 1;
+
+	 //    	} else if (snapshot.val()[2] === 0) {
+	 //    		bear = new Bear(this.game, 900, 500);
+	 //    		this.game.add.existing(bear);
+	 //    		playerIndex = 2;
+
+	 //    	} else if (snapshot.val()[3] === 0) {
+	 //    		bear = new Bear(this.game, 900, 500);
+	 //    		this.game.add.existing(bear);
+	 //    		playerIndex = 3;
+
+	 //    	} else {
+
+	 //    	}
+
+		// });
 
 	    snow = this.add.emitter(this.world.centerX, 0, 1000);
 	    this.makeSnow(snow);
@@ -163,25 +187,44 @@ Game.prototype = {
 
 	getActions : function() {
 
-	    playerLocations.on('value', function(snapshot) {
+		// playerLocations.on('value', function(snapshot) {
+	 //    	console.log(snapshot.val()[0]);
 
-		console.log(snapshot.val());
+		// });
 
-		  	if (snapshot.val()[playerIndex] === 2) {
+	    playerLocation.on('value', function(snapshot) {
+
+		  	if (snapshot.val() === 1) {
 	        	bear.runLeft();
 
-	    	} else if (snapshot.val()[playerIndex] === 3) {
+	    	} else if (snapshot.val() === 2) {
 	        	bear.jump();
 
-	    	} else if (snapshot.val()[playerIndex] === 4) {
+	    	} else if (snapshot.val() === 3) {
 	        	bear.runRight();
 
-	    	} else if (snapshot.val()[playerIndex] === 1) {
+	    	} else if (snapshot.val() === 0) {
 	        	bear.stopNow();
 
 	    	}
 
 		});
+
+		foes.on('value', function(snapshot) {
+			if (snapshot.val() === 1) {
+	        	foe1.runLeft();
+
+	    	} else if (snapshot.val() === 2) {
+	        	foe1.jump();
+
+	    	} else if (snapshot.val() === 3) {
+	        	foe1.runRight();
+
+	    	} else if (snapshot.val() === 0) {
+	        	foe1.stopNow();
+
+	    	}
+		})
 	},
 
 	update : function() {
@@ -202,19 +245,19 @@ Game.prototype = {
 
         if (cursors.left.isDown) {
 
-	        playerLocations.update({1:2});
+	        playerLocation.set(1);
 
 	    } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	        // playerLocations.update({1:3});
+	        playerLocation.set(2);
 
 	    } else if (cursors.right.isDown) {
 
-	  		// playerLocations.update({1:4});
+	  		playerLocation.set(3);
 
 	    } else {
 
-	        // playerLocations.update({1:1});
+	        playerLocation.set(0);
 
 	    }
 
