@@ -118,14 +118,35 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-	    // playerCount = playerLocations.length;
-	    // if (playerCount <= 4) {
-	    	bear = new Bear(this.game, 900, 500);
-	    	this.game.add.existing(bear);
-	    	playerLocations.push({2 : "stop"});
-	    // } els/e {
-	    	//create function
-	    // };
+	    playerIndex = null;
+
+	    playerLocations.on('value', function(snapshot) {
+
+		  	if (snapshot.val()[0] === 0) {
+		  		bear = new Bear(this.game, 900, 500);
+		  		this.game.add.existing(bear);
+		  		playerIndex = 0;
+
+	    	} else if (snapshot.val()[1] === 0) {
+	    		bear = new Bear(this.game, 900, 500);
+	    		this.game.add.existing(bear);
+	    		playerIndex = 1;
+
+	    	} else if (snapshot.val()[2] === 0) {
+	    		bear = new Bear(this.game, 900, 500);
+	    		this.game.add.existing(bear);
+	    		playerIndex = 2;
+
+	    	} else if (snapshot.val()[3] === 0) {
+	    		bear = new Bear(this.game, 900, 500);
+	    		this.game.add.existing(bear);
+	    		playerIndex = 3;
+
+	    	} else {
+
+	    	}
+
+		});
 
 	    snow = this.add.emitter(this.world.centerX, 0, 1000);
 	    this.makeSnow(snow);
@@ -141,18 +162,21 @@ Game.prototype = {
 		},
 
 	getActions : function() {
+
 	    playerLocations.on('value', function(snapshot) {
 
-		  	if (snapshot.val() === "left") {
+		console.log(snapshot.val());
+
+		  	if (snapshot.val()[playerIndex] === 2) {
 	        	bear.runLeft();
 
-	    	} else if (snapshot.val() === "jump") {
+	    	} else if (snapshot.val()[playerIndex] === 3) {
 	        	bear.jump();
 
-	    	} else if (snapshot.val() === "right") {
+	    	} else if (snapshot.val()[playerIndex] === 4) {
 	        	bear.runRight();
 
-	    	} else if (snapshot.val() === "stop") {
+	    	} else if (snapshot.val()[playerIndex] === 1) {
 	        	bear.stopNow();
 
 	    	}
@@ -178,19 +202,19 @@ Game.prototype = {
 
         if (cursors.left.isDown) {
 
-	        playerLocations.update({2:"left"});
+	        playerLocations.update({1:2});
 
 	    } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	        playerLocations.update({2:"jump"});
+	        // playerLocations.update({1:3});
 
 	    } else if (cursors.right.isDown) {
 
-	  		playerLocations.update({2:"right"});
+	  		// playerLocations.update({1:4});
 
 	    } else {
 
-	        playerLocations.update({2:"stop"});
+	        // playerLocations.update({1:1});
 
 	    }
 
