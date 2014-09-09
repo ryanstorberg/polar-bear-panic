@@ -119,14 +119,19 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
+        var handleEvent = function(num) {
+        	return num;
+        }
+
 	    var numPlayers = function(database) {
-		    return database.once("value", function(snapshot) {
-		    	return snapshot.numChildren();
+		    database.once("value", function(snapshot) {
+		    	return handleEvent(snapshot.numChildren());
 			});
 		}
+        
+        console.log(numPlayers(playerLocations));
 
-		console.log(numPlayers(playerLocations));
-
+	
 		
 
 		// console.log(playerLocationsSnapshot.numChildren());
