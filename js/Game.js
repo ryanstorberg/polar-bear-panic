@@ -107,23 +107,12 @@ Game.prototype = {
 	    sky = this.add.image(0, 0, 'sky');
 	    sky.fixedToCamera = true;
 
-
 	    map = this.game.add.tilemap('map');
 	    map.addTilesetImage('kenney');
 	    layer = map.createLayer('Tile Layer 1');
 	    this.physics.enable(layer, Phaser.Physics.ARCADE);
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
-
-	    otherPlayers = false;
-
-	    playerLocations.on('child_added', function(childSnapshot) {
-	    	console.log("yo");
-			foe = childSnapshot.ref();
-			foeBear = new Bear(this.game, 900, 500);
-			this.game.add.existing(foeBear);
-			otherPlayers = true;
-		});
 
 		bear = new Bear(this.game, 900, 500);
 		this.game.add.existing(bear);
@@ -141,7 +130,21 @@ Game.prototype = {
 	    pole = this.add.sprite( 11715, 200, 'pole');
 	    this.game.physics.enable(pole, Phaser.Physics.ARCADE);
 
-	    playerLocation.on('value', function(snapshot) {
+	},
+
+	createBear: function() {
+		playerLocations.once('child_added', function(childSnapshot) {
+			foe = childSnapshot.ref();
+			foeBear = new Bear(this.game, 900, 500);
+			if (foeBear !== undefined) {
+				this.game.add.existing(foeBear);
+			}
+			openSockets();
+		});
+	},
+
+	openSockets: function() {
+		playerLocation.on('value', function(snapshot) {
 
 		  	if (snapshot.val() === 1) {
 	        	bear.runLeft();
@@ -159,23 +162,17 @@ Game.prototype = {
 
 		});
 
-	    if (otherPlayers) {
-			foe.on('value', function(snapshot) {
-				if (snapshot.val() === 1) {
-		        	foeBear.runLeft();
-
-		    	} else if (snapshot.val() === 2) {
-		        	foeBear.jump();
-
-		    	} else if (snapshot.val() === 3) {
-		        	foeBear.runRight();
-
-		    	} else if (snapshot.val() === 0) {
-		        	foeBear.stopNow();
-		        }
-		    });
-		}
-
+	    foe.on('value', function(snapshot) {
+			if (snapshot.val() === 1) {
+	        	foeBear.runLeft();
+	    	} else if (snapshot.val() === 2) {
+	        	foeBear.jump();
+	    	} else if (snapshot.val() === 3) {
+	        	foeBear.runRight();
+	    	} else if (snapshot.val() === 0) {
+	        	foeBear.stopNow();
+	        }
+	    });
 	},
 
 	update: function() {
@@ -211,6 +208,8 @@ Game.prototype = {
 	        playerLocation.set(0);
 
 	    }
+
+	    this.createBear();
 
 	}
 };
