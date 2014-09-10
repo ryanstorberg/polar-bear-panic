@@ -1,12 +1,15 @@
 Game = function(game) {
 	firebase = new Firebase("https://fiery-inferno-6891.firebaseio.com");
+
+	localActions = null;
+	remoteActions = firebase;
+	local = null;
+	remote = null;
+
 	cursors = null;
 	map = null;
 	layer = null;
-	snow = null;
 	bear = null;
-	local = null;
-	remote = null;
 };
 
 var Bear = function(game, x, y, frame) {
@@ -46,6 +49,12 @@ Bear.prototype.stopNow = function(){
     this.frame = 2;
 };
 
+function createOpponent(snapshot) {
+	remote = new Bear(this.game, 900, 500);
+	this.game.add.existing(remote);
+	remoteActions = snapshot.ref();
+};
+
 Game.prototype = {
 
 	restartGame: function() {
@@ -54,16 +63,18 @@ Game.prototype = {
 
 	create: function() {
 
+		firebase.on('child_added', function(snapshot) {
+	    	createOpponent(snapshot);
+	    })
+
+	    local = new Bear(this.game, 900, 500);
+		this.game.add.existing(local);
+		localActions = firebase.push(0);
+
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.game.physics.arcade.gravity.y = 300;
 
 	    cursors = this.input.keyboard.createCursorKeys();
-
-	    playerLocations.on('child_added', function(snappychild) {
-	    	otherPlayerLocation = snappychild.ref();
-	    	foeBear = new Bear(this.game, 900, 500);
-			this.game.add.existing(bear);
-	    })
 
 	    map = this.game.add.tilemap('map');
 	    map.addTilesetImage('kenney');
@@ -72,58 +83,56 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-	    local = new Bear(this.game, 900, 500);
-		this.game.add.existing(bear);
-		playerLocation = playerLocations.push(0);
-
-		remote = new Bear(this.game, 900, 500);
-		this.game.add.existing(bear);
-
 		localActions.on('value', function(snapshot) {
-		  	if (snapshot.val() === 1) {
+		  	if (snapshot.val() === 1 || snapshot.val() === 10) {
 	        	local.runLeft();
-	    	} else if (snapshot.val() === 2) {
+	    	} else if (snapshot.val() === 2 || snapshot.val() === 20) {
 	        	local.jump();
-	    	} else if (snapshot.val() === 3) {
+	    	} else if (snapshot.val() === 3 || snapshot.val() === 30) {
 	        	local.runRight();
-	    	} else if (snapshot.val() === 0) {
+	    	} else if (snapshot.val() === 0 || snapshot.val() === 00) {
 	        	local.stopNow();
 	    	}
 		});
 
 	    remoteActions.on('value', function(snapshot) {
-		  	if (snapshot.val() === 1) {
+		  	if (snapshot.val() === 1 || snapshot.val() === 10) {
 	        	remote.runLeft();
-	    	} else if (snapshot.val() === 2) {
+	    	} else if (snapshot.val() === 2 || snapshot.val() === 20) {
 	        	remote.jump();
-	    	} else if (snapshot.val() === 3) {
+	    	} else if (snapshot.val() === 3 || snapshot.val() === 30) {
 	        	remote.runRight();
-	    	} else if (snapshot.val() === 0) {
+	    	} else if (snapshot.val() === 0 || snapshot.val() === 00) {
 	        	remote.stopNow();
-	    	}
+	    	} 
 		});
 
 	},
 
 	update: function() {
 
-		this.game.physics.arcade.collide(bear, layer);
+		this.game.physics.arcade.collide(local, layer);
+		this.game.physics.arcade.collide(remote, layer);
 
         if (cursors.left.isDown) {
 
-	        playerLocation.set(1);
+	        localActions.set(1);
+	        localActions.set(10);
 
 	    } else if (cursors.up.isDown && bear.body.onFloor()) {
 
-	        playerLocation.set(2);
+	        localActions.set(2);
+	        localActions.set(20);
 
 	    } else if (cursors.right.isDown) {
 
-	  		playerLocation.set(3);
+	  		localActions.set(3);
+	  		localActions.set(30);
 
 	    } else {
 
-	        playerLocation.set(0);
+	        localActions.set(0);
+	        localActions.set(00);
 
 	    }
 	}

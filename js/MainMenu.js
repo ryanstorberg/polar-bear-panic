@@ -10,7 +10,7 @@ MainMenu.prototype = {
 	},
 
 	startGame: function() {
-
+		
 		this.game.state.start('Game');
 		
 	}
