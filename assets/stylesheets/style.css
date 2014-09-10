@@ -1,0 +1,23 @@
+canvas {
+    margin: auto;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-style: solid;
+    border-width: 3px;
+    border-color: blue;
+}
+
+body {
+	background-image: url('zwartevilt.png');
+	background-repeat: repeat;
+}
+
+body a{
+    color: white;
+    font-family: Helvetica;
+    float: right;
+}
