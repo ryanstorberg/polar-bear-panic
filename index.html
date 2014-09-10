@@ -11,9 +11,10 @@
     <script src="js/Preloader.js"></script>
     <script src="js/MainMenu.js"></script>
     <script src="js/Game.js"></script>
-    <script src= "js/Over.js"></script>
+    <script src="js/Over.js"></script>
     <script src="js/Instructions.js"></script>
     <script src= "js/Multiplayer.js"></script>
+    <script src="js/Levels.js"></script>
 
 
 </head>
@@ -24,6 +25,7 @@
             var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
             game.state.add('Preloader', Preloader);
             game.state.add('MainMenu', MainMenu);
+            game.state.add('Levels', Levels);
             game.state.add('Game', Game);
             // game.state.add('Multiplayer', Multiplayer);
             game.state.add('Instructions', Instructions);
