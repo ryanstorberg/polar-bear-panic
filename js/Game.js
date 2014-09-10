@@ -165,18 +165,18 @@ Game.prototype = {
     iceBergs.enableBody = true;
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
 
-    for (var i = 0; i < 2; i++){
-      iceBergs.add(new Iceberg(this.game, 1475 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 2350 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 3250 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 4550 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 5250 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 5650 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 6250 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 6850 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 9050 + i * 48, 50));
-      iceBergs.add(new Iceberg(this.game, 10450 + i * 48, 50));
-    }
+    // for (var i = 0; i < 1; i++){
+    iceBergs.add(new Iceberg(this.game, 1475, 50));
+    iceBergs.add(new Iceberg(this.game, 2350, 50));
+    iceBergs.add(new Iceberg(this.game, 3250, 50));
+    iceBergs.add(new Iceberg(this.game, 4550, 50));
+    iceBergs.add(new Iceberg(this.game, 5250, 50));
+    iceBergs.add(new Iceberg(this.game, 5650, 50));
+    iceBergs.add(new Iceberg(this.game, 6250, 50));
+    iceBergs.add(new Iceberg(this.game, 6850, 50));
+    iceBergs.add(new Iceberg(this.game, 9050, 50));
+    iceBergs.add(new Iceberg(this.game, 10450, 50));
+    // }
 
     chaser = this.add.sprite(0, 0, 'chaser');
     this.chase(chaser);
@@ -196,7 +196,7 @@ Game.prototype = {
     this.game.physics.arcade.collide(pole, layer);
     this.game.physics.arcade.collide(layer, iceBergs);
  
-    globalWarmingSpeed = 250;
+    globalWarmingSpeed = 300;
 
     chaser.body.velocity.x = globalWarmingSpeed;
     warmth.body.velocity.x = globalWarmingSpeed;
