@@ -12,7 +12,12 @@ canvas {
 }
 
 body {
-	/*background-color: black;*/
 	background-image: url('zwartevilt.png');
 	background-repeat: repeat;
+}
+
+body a{
+    color: white;
+    font-family: Helvetica;
+    float: right;
 }
