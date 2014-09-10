@@ -1,14 +1,12 @@
 Game = function(game) {
+	firebase = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 	cursors = null;
-	sky = null;
 	map = null;
 	layer = null;
 	snow = null;
 	bear = null;
-	hardRain = null;
-	iceberg = null;
-	chaser = null;
-	pole = null;
+	local = null;
+	remote = null;
 };
 
 var Bear = function(game, x, y, frame) {
@@ -48,64 +46,24 @@ Bear.prototype.stopNow = function(){
     this.frame = 2;
 };
 
-Bear.prototype.die = function(){
-	this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
-	this.kill();
-	this.game.state.start("Over");
-};
-
-Bear.prototype.win = function(){
-    this.game.add.text(this.position.x, 300, 'You Made It!\n    :)', { fill: '#ffffff' });
-    this.game.state.start("Over");
-};
-
 Game.prototype = {
 
 	restartGame: function() {
 		this.game.state.start('Game');
 	},
 
-	makeSnow: function(object) {
-		object.makeParticles('snow');
-		object.width = this.world.width;
-		object.minParticleScale = 0.4;
-		object.maxParticleScale = 0.8;
-		object.setYSpeed(300, 500);
-		object.setXSpeed(-500, -1000);
-		object.minRotation = 0;
-		object.maxRotation = 0;
-		object.start(false, 1600, 5, 0);
-	},
-
-	makeRain: function(object) {
-		this.physics.enable(object, Phaser.Physics.ARCADE)
-		object.width = this.world.width;
-		object.makeParticles('fish');
-		object.setYSpeed(300, 500);
-		object.setXSpeed(-500, -1000);
-		object.minRotation = 360;
-		object.maxRotation = 90;
-		object.start(false, 1600, 5, 0);
-	},
-
-	chase: function(object) {
-		object.animations.add('chase');
-		object.animations.play('chase', 7, true);
-		this.game.physics.enable(object, Phaser.Physics.ARCADE);
-		object.body.collideWorldBounds = true;
-	},
-
 	create: function() {
-
-		playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.game.physics.arcade.gravity.y = 300;
 
 	    cursors = this.input.keyboard.createCursorKeys();
 
-	    sky = this.add.image(0, 0, 'sky');
-	    sky.fixedToCamera = true;
+	    playerLocations.on('child_added', function(snappychild) {
+	    	otherPlayerLocation = snappychild.ref();
+	    	foeBear = new Bear(this.game, 900, 500);
+			this.game.add.existing(bear);
+	    })
 
 	    map = this.game.add.tilemap('map');
 	    map.addTilesetImage('kenney');
@@ -114,82 +72,42 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-		bear = new Bear(this.game, 900, 500);
+	    local = new Bear(this.game, 900, 500);
 		this.game.add.existing(bear);
 		playerLocation = playerLocations.push(0);
 
-		snow = this.add.emitter(this.world.centerX, 0, 1000);
-	    this.makeSnow(snow);
+		remote = new Bear(this.game, 900, 500);
+		this.game.add.existing(bear);
 
-	    hardRain = this.add.emitter(this.world.centerX, 0, 100);
-	    this.makeRain(hardRain);
-
-	    chaser = this.add.sprite(0, 0, 'chaser');
-	    this.chase(chaser);
-
-	    pole = this.add.sprite( 11715, 200, 'pole');
-	    this.game.physics.enable(pole, Phaser.Physics.ARCADE);
-
-	},
-
-	createBear: function() {
-		playerLocations.once('child_added', function(childSnapshot) {
-			foe = childSnapshot.ref();
-			foeBear = new Bear(this.game, 900, 500);
-			if (foeBear !== undefined) {
-				this.game.add.existing(foeBear);
-			}
-			openSockets();
-		});
-	},
-
-	openSockets: function() {
-		playerLocation.on('value', function(snapshot) {
-
+		localActions.on('value', function(snapshot) {
 		  	if (snapshot.val() === 1) {
-	        	bear.runLeft();
-
+	        	local.runLeft();
 	    	} else if (snapshot.val() === 2) {
-	        	bear.jump();
-
+	        	local.jump();
 	    	} else if (snapshot.val() === 3) {
-	        	bear.runRight();
-
+	        	local.runRight();
 	    	} else if (snapshot.val() === 0) {
-	        	bear.stopNow();
-
+	        	local.stopNow();
 	    	}
-
 		});
 
-	    foe.on('value', function(snapshot) {
-			if (snapshot.val() === 1) {
-	        	foeBear.runLeft();
+	    remoteActions.on('value', function(snapshot) {
+		  	if (snapshot.val() === 1) {
+	        	remote.runLeft();
 	    	} else if (snapshot.val() === 2) {
-	        	foeBear.jump();
+	        	remote.jump();
 	    	} else if (snapshot.val() === 3) {
-	        	foeBear.runRight();
+	        	remote.runRight();
 	    	} else if (snapshot.val() === 0) {
-	        	foeBear.stopNow();
-	        }
-	    });
+	        	remote.stopNow();
+	    	}
+		});
+
 	},
 
 	update: function() {
 
 		this.game.physics.arcade.collide(bear, layer);
-	    this.game.physics.arcade.collide(bear, hardRain);
-	    this.game.physics.arcade.collide(pole, layer);
-
-	    chaser.body.velocity.x = 0;
-
-        if (this.game.physics.arcade.overlap(bear, chaser)) {
-        	bear.die();
-        }
-
-        if (this.game.physics.arcade.overlap(bear, pole)) {
-        	bear.win();
-        }
 
         if (cursors.left.isDown) {
 
@@ -208,8 +126,5 @@ Game.prototype = {
 	        playerLocation.set(0);
 
 	    }
-
-	    this.createBear();
-
 	}
 };
