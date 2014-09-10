@@ -85,7 +85,7 @@ var Iceberg = function(game, x, y, frame) {
 Iceberg.prototype = Object.create(Phaser.Sprite.prototype);
 Iceberg.prototype.constructor = Iceberg;
 
-Game.prototype = {
+MapTwo.prototype = {
 
   restartGame: function() {
     this.game.state.start('MapTwo');
@@ -137,7 +137,7 @@ Game.prototype = {
     sky.fixedToCamera = true;
 
 
-    mapTwo = this.game.add.tilemap('map2');
+    mapTwo = this.game.add.tilemap('mapTwo');
     mapTwo.addTilesetImage('kenney');
     layer = mapTwo.createLayer('Tile Layer 2');
     this.physics.enable(layer, Phaser.Physics.ARCADE);
