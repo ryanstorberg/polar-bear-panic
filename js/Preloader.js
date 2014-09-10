@@ -31,6 +31,7 @@ Preloader.prototype = {
 
         this.game.load.audio('jump1', ['assets/jump1.mp3']);
         this.game.load.audio('fish', ['assets/fishslap1.mp3']);
+        this.game.load.audio('music', ['assets/chibiNinja.mp3']);
 
 
 	},
