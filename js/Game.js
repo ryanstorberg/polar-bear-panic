@@ -9,8 +9,6 @@ Game = function(game) {
 	iceberg = null;
 	chaser = null;
 	pole = null;
-	// foes = null;
-	// numPlayers = null;
 };
 
 var Bear = function(game, x, y, frame) {
@@ -83,8 +81,6 @@ Game.prototype = {
 		this.physics.enable(object, Phaser.Physics.ARCADE)
 		object.width = this.world.width;
 		object.makeParticles('fish');
-		// hardRain3.minParticleScale = 0.2;
-	    // hardRain3.maxParticleScale = 0.4;
 		object.setYSpeed(300, 500);
 		object.setXSpeed(-500, -1000);
 		object.minRotation = 360;
@@ -92,7 +88,7 @@ Game.prototype = {
 		object.start(false, 1600, 5, 0);
 	},
 
-	chase: function(object){
+	chase: function(object) {
 		object.animations.add('chase');
 		object.animations.play('chase', 7, true);
 		this.game.physics.enable(object, Phaser.Physics.ARCADE);
@@ -119,94 +115,21 @@ Game.prototype = {
 	    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
 	    layer.resizeWorld();
 
-  //       var handleEvent = function(num) {
-  //       	console.log("I know we have " + num  );
-  //       }
+	    otherPlayers = false;
 
-	 //    var numPlayers = function(database) {
-		//     database.once("value", function(snapshot) {
-		//     	console.log(snapshot.numChildren());
-		//     	handleEvent(snapshot.numChildren());
-		//     	return snapshot.numChildren();
-		// 	});
-		// }
-        
-        // console.log(numPlayers(playerLocations));
-
-	
-		
-
-		// console.log(playerLocationsSnapshot.numChildren());
-
-	    // playerIndex = null;
-
-	    // playerLocations(function(snapshot) {
-	    // 	console.log(snapshot.numChildren);
-	    // })
-
-	    bear = new Bear(this.game, 900, 500);
-		this.game.add.existing(bear);
-		playerLocation = playerLocations.push(0);
-		// console.log("playerLocations: " + playerLocations);
-		// playerLocations.once("value", function(snapshot) {
-		// 	console.log("playerLocations snapshot: " + snapshot.val());
-		// 	snapshot.forEach(function(challenger) {
-		// 		console.log("challenger: " + challenger);
-		// 		console.log("challenger value: " + challenger.val());
-		// 	})
-		// })
-		
-		// foes;
-
-
-
-		// console.log(playerLocations.val());
-
-
-		playerLocations.once('value', function(snapshot) {
-			snapshot.forEach(function(child) {
-				console.log(child);
-				if (child !== playerLocation) {
-					foes = child;
-					
-					foe1 = new Bear(this.game, 900, 500);
-					// debugger
-					this.game.add.existing(foe1);
-				}
-			});
+	    playerLocations.on('child_added', function(childSnapshot) {
+	    	console.log("yo");
+			foe = childSnapshot.ref();
+			foeBear = new Bear(this.game, 900, 500);
+			this.game.add.existing(foeBear);
+			otherPlayers = true;
 		});
 
-		// foes;
+		bear = new Bear(this.game, 900, 500);
+		this.game.add.existing(bear);
+		playerLocation = playerLocations.push(0);
 
-	 //    playerLocations.on('value', function(snapshot) {
-
-		//   	if (snapshot.val()[0] === 0) {
-		//   		bear = new Bear(this.game, 900, 500);
-		//   		this.game.add.existing(bear);
-		//   		// playerIndex = 0;
-
-	 //    	} else if (snapshot.val()[1] === 0) {
-	 //    		bear = new Bear(this.game, 900, 500);
-	 //    		this.game.add.existing(bear);
-	 //    		playerIndex = 1;
-
-	 //    	} else if (snapshot.val()[2] === 0) {
-	 //    		bear = new Bear(this.game, 900, 500);
-	 //    		this.game.add.existing(bear);
-	 //    		playerIndex = 2;
-
-	 //    	} else if (snapshot.val()[3] === 0) {
-	 //    		bear = new Bear(this.game, 900, 500);
-	 //    		this.game.add.existing(bear);
-	 //    		playerIndex = 3;
-
-	 //    	} else {
-
-	 //    	}
-
-		// });
-
-	    snow = this.add.emitter(this.world.centerX, 0, 1000);
+		snow = this.add.emitter(this.world.centerX, 0, 1000);
 	    this.makeSnow(snow);
 
 	    hardRain = this.add.emitter(this.world.centerX, 0, 100);
@@ -217,14 +140,6 @@ Game.prototype = {
 
 	    pole = this.add.sprite( 11715, 200, 'pole');
 	    this.game.physics.enable(pole, Phaser.Physics.ARCADE);
-		},
-
-	getActions : function() {
-
-		// playerLocations.on('value', function(snapshot) {
-	 //    	console.log(snapshot.val()[0]);
-
-		// });
 
 	    playerLocation.on('value', function(snapshot) {
 
@@ -244,28 +159,26 @@ Game.prototype = {
 
 		});
 
-		// if (typeof foes === undefined) {
-		// } else {
-		// 	console.log("foes is " + foes);
-		// 	foes.on('value', function(snapshot) {
-		// 	if (snapshot.val() === 1) {
-	 //        	foe1.runLeft();
+	    if (otherPlayers) {
+			foe.on('value', function(snapshot) {
+				if (snapshot.val() === 1) {
+		        	foeBear.runLeft();
 
-	 //    	} else if (snapshot.val() === 2) {
-	 //        	foe1.jump();
+		    	} else if (snapshot.val() === 2) {
+		        	foeBear.jump();
 
-	 //    	} else if (snapshot.val() === 3) {
-	 //        	foe1.runRight();
+		    	} else if (snapshot.val() === 3) {
+		        	foeBear.runRight();
 
-	 //    	} else if (snapshot.val() === 0) {
-	 //        	foe1.stopNow();
+		    	} else if (snapshot.val() === 0) {
+		        	foeBear.stopNow();
+		        }
+		    });
+		}
 
-	 //    	}
-		// })
-	 //    }
 	},
 
-	update : function() {
+	update: function() {
 
 		this.game.physics.arcade.collide(bear, layer);
 	    this.game.physics.arcade.collide(bear, hardRain);
@@ -298,8 +211,6 @@ Game.prototype = {
 	        playerLocation.set(0);
 
 	    }
-
-	    this.getActions();
 
 	}
 };
