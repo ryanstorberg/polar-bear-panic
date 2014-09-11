@@ -164,25 +164,24 @@ MapFour.prototype = {
     snow.makeParticles('snow');
     this.makeSnow(snow);
 
-    hardRain = this.add.emitter(this.world.centerX, 0, 100);
+    hardRain = this.add.emitter(this.world.centerX, 0, 60);
     this.makeRain(hardRain);
 
     iceBergs = this.game.add.group();
     iceBergs.enableBody = true;
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
 
-    // for (var i = 0; i < 1; i++){
-    iceBergs.add(new Iceberg(this.game, 1475, 50));
+    iceBergs.add(new Iceberg(this.game, 1250, 450));
     iceBergs.add(new Iceberg(this.game, 2350, 50));
+    iceBergs.add(new Iceberg(this.game, 2570, 50));
     iceBergs.add(new Iceberg(this.game, 3250, 50));
-    iceBergs.add(new Iceberg(this.game, 4550, 50));
+    iceBergs.add(new Iceberg(this.game, 4750, 50));
     iceBergs.add(new Iceberg(this.game, 5250, 50));
-    iceBergs.add(new Iceberg(this.game, 5650, 50));
+    iceBergs.add(new Iceberg(this.game, 5550, 50));
     iceBergs.add(new Iceberg(this.game, 6250, 50));
     iceBergs.add(new Iceberg(this.game, 6850, 50));
-    iceBergs.add(new Iceberg(this.game, 9050, 50));
-    iceBergs.add(new Iceberg(this.game, 10450, 50));
-    // }
+    iceBergs.add(new Iceberg(this.game, 9850, 50));
+    iceBergs.add(new Iceberg(this.game, 11230, 50));
 
     chaser = this.add.sprite(0, 0, 'chaser');
     this.chase(chaser);
