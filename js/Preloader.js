@@ -5,7 +5,7 @@ Preloader.prototype = {
 	preload:function() {
         this.game.load.image('screenMainmenu', 'assets/screenMainmenu.png');
         this.game.load.image('singlePlayer', 'assets/singlePlayer.png');
-        this.game.load.image('multiPlayer', 'assets/multiPlayer.png');
+        this.game.load.image('aboutUs', 'assets/about_us.png');
         this.game.load.image('instructions', 'assets/instructions.png');
         this.game.load.image('stageSelect', 'assets/stage_select_header.png');
         this.game.load.image('map1', 'assets/map1.png');
