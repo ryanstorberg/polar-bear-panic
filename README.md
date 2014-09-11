@@ -8,7 +8,5 @@ Polar Bear Panic!
 - [Ryan Storberg](https://github.com/ryanstorberg)
 
 
-Polar Bear Panic is a side-scrolling race with your friends!
-Flee from global warming, and be the first bear to reach the end of the course!
-
-[MIT License](http://opensource.org/licenses/MIT)
+Polar Bear Panic is a 2Dside-scroller where you play as a polar bear escaping the devastating effects of global warming.
+Dodge flying fish, avoid treacherous icebergs, and stay out of the freezing arctic water!
