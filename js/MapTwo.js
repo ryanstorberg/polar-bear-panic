@@ -85,7 +85,7 @@ var Iceberg = function(game, x, y, frame) {
 Iceberg.prototype = Object.create(Phaser.Sprite.prototype);
 Iceberg.prototype.constructor = Iceberg;
 
-Game.prototype = {
+MapTwo.prototype = {
 
   restartGame: function() {
     this.game.state.start('MapTwo');
@@ -137,14 +137,14 @@ Game.prototype = {
     sky.fixedToCamera = true;
 
 
-    mapTwo = this.game.add.tilemap('map2');
+    mapTwo = this.game.add.tilemap('mapTwo');
     mapTwo.addTilesetImage('kenney');
     layer = mapTwo.createLayer('Tile Layer 2');
     this.physics.enable(layer, Phaser.Physics.ARCADE);
     mapTwo.setCollisionBetween(1, 100000, true, 'Tile Layer 2');
     layer.resizeWorld();
 
-    this.bear = new Bear(this.game, 900, 500);
+    this.bear = new Bear(this.game, 1200, 0);
     this.game.add.existing(this.bear);
 
     this.lake = new Lake(this.game, 0, 565, 12600, 70);
@@ -196,7 +196,7 @@ Game.prototype = {
     this.game.physics.arcade.collide(pole, layer);
     this.game.physics.arcade.collide(layer, iceBergs);
 
-    globalWarmingSpeed = 300;
+    globalWarmingSpeed = 180;
 
     chaser.body.velocity.x = globalWarmingSpeed;
     warmth.body.velocity.x = globalWarmingSpeed;
