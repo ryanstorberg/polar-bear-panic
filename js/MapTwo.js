@@ -11,6 +11,7 @@ MapTwo = function(game) {
   var warmth;
   var jumpSfx;
   var fishSfx;
+  var musicSfx;
 };
 
 var Lake = function(game, x, y, width, height) {
@@ -65,11 +66,13 @@ Bear.prototype.die = function(){
   this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
   this.kill();
   this.game.state.start("Over");
+  musicSfx.stop();
 };
 
 Bear.prototype.win = function(){
     this.game.add.text(this.position.x, 300, 'You Made It!\n    :)', { fill: '#ffffff' });
     this.game.state.start("Over");
+    musicSfx.stop();
 };
 
 var Iceberg = function(game, x, y, frame) {
@@ -132,6 +135,9 @@ MapTwo.prototype = {
 
     jumpSfx = this.game.add.audio('jump1');
     fishSfx = this.game.add.audio('fish');
+    musicSfx = this.game.add.audio('music');
+
+    musicSfx.play();
 
     sky = this.add.image(0, 0, 'sky');
     sky.fixedToCamera = true;
@@ -144,7 +150,7 @@ MapTwo.prototype = {
     mapTwo.setCollisionBetween(1, 100000, true, 'Tile Layer 2');
     layer.resizeWorld();
 
-    this.bear = new Bear(this.game, 900, 500);
+    this.bear = new Bear(this.game, 900, 200);
     this.game.add.existing(this.bear);
 
     this.lake = new Lake(this.game, 0, 565, 12600, 70);

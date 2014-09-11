@@ -11,6 +11,7 @@ MapOne = function(game) {
   var warmth;
   var jumpSfx;
   var fishSfx;
+  var musicSfx;
 };
 
 var Lake = function(game, x, y, width, height) {
@@ -65,11 +66,13 @@ Bear.prototype.die = function(){
   this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
   this.kill();
   this.game.state.start("Over");
+  musicSfx.stop();
 };
 
 Bear.prototype.win = function(){
     this.game.add.text(this.position.x, 300, 'You Made It!\n    :)', { fill: '#ffffff' });
     this.game.state.start("Over");
+    musicSfx.stop();
 };
 
 var Iceberg = function(game, x, y, frame) {
@@ -132,6 +135,9 @@ MapOne.prototype = {
 
     jumpSfx = this.game.add.audio('jump1');
     fishSfx = this.game.add.audio('fish');
+    musicSfx = this.game.add.audio('music');
+
+    musicSfx.play();
 
     sky = this.add.image(0, 0, 'sky');
     sky.fixedToCamera = true;
