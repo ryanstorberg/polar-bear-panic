@@ -12,8 +12,9 @@ canvas {
 }
 
 body {
-	background-image: url('zwartevilt.png');
-	background-repeat: repeat;
+    background-image: url('/assets/background.jpg');*/
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 body a{
