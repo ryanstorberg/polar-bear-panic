@@ -1,13 +1,13 @@
-Game = function(game) {
-	var cursors;
-	var sky;
-	var map;
-	var layer;
-	var snow;
-	var bear;
-	var hardRain;
-	var chaser;
-	var pole;
+MapOne = function(game) {
+  var cursors;
+  var sky;
+  var map;
+  var layer;
+  var snow;
+  var bear;
+  var hardRain;
+  var chaser;
+  var pole;
   var warmth;
   var jumpSfx;
   var fishSfx;
@@ -63,9 +63,9 @@ Bear.prototype.stop = function(){
 };
 
 Bear.prototype.die = function(){
-	this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
-	this.kill();
-	this.game.state.start("Over");
+  this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
+  this.kill();
+  this.game.state.start("Over");
   musicSfx.stop();
 };
 
@@ -88,47 +88,47 @@ var Iceberg = function(game, x, y, frame) {
 Iceberg.prototype = Object.create(Phaser.Sprite.prototype);
 Iceberg.prototype.constructor = Iceberg;
 
-Game.prototype = {
+MapOne.prototype = {
 
-	restartGame: function() {
-		this.game.state.start('Game');
-	},
+  restartGame: function() {
+    this.game.state.start('MapOne');
+  },
 
-	makeSnow: function(object) {
-		object.width = this.world.width;
-		object.minParticleScale = 0.1;
-		object.maxParticleScale = 0.5;
-		object.setYSpeed(300, 500);
-		object.setXSpeed(-500, -1000);
-		object.minRotation = 0;
-		object.maxRotation = 0;
-		object.start(false, 1600, 5, 0);
-	},
+  makeSnow: function(object) {
+    object.width = this.world.width;
+    object.minParticleScale = 0.1;
+    object.maxParticleScale = 0.5;
+    object.setYSpeed(300, 500);
+    object.setXSpeed(-500, -1000);
+    object.minRotation = 0;
+    object.maxRotation = 0;
+    object.start(false, 1600, 5, 0);
+  },
 
-	makeRain: function(object) {
-		this.physics.enable(object, Phaser.Physics.ARCADE)
-		object.width = this.world.width;
-		object.makeParticles('fish');
-		object.setYSpeed(300, 500);
-		object.setXSpeed(-500, -1000);
-		object.minRotation = 360;
-		object.maxRotation = 90;
-		object.start(false, 1600, 5, 0);
-	},
+  makeRain: function(object) {
+    this.physics.enable(object, Phaser.Physics.ARCADE)
+    object.width = this.world.width;
+    object.makeParticles('fish');
+    object.setYSpeed(300, 500);
+    object.setXSpeed(-500, -1000);
+    object.minRotation = 360;
+    object.maxRotation = 90;
+    object.start(false, 1600, 5, 0);
+  },
 
-	chase: function(object){
-		this.game.physics.enable(object, Phaser.Physics.ARCADE);
-		object.body.collideWorldBounds = true;
-	},
+  chase: function(object){
+    this.game.physics.enable(object, Phaser.Physics.ARCADE);
+    object.body.collideWorldBounds = true;
+  },
 
   warm: function(object){
     this.game.physics.enable(object, Phaser.Physics.ARCADE);
     object.body.collideWorldBounds = true;
   },
 
-	create: function() {
+  create: function() {
 
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.gravity.y = 300;
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -143,11 +143,11 @@ Game.prototype = {
     sky.fixedToCamera = true;
 
 
-    map = this.game.add.tilemap('map');
-    map.addTilesetImage('kenney');
-    layer = map.createLayer('Tile Layer 1');
+    mapOne = this.game.add.tilemap('mapOne');
+    mapOne.addTilesetImage('kenney');
+    layer = mapOne.createLayer('Tile Layer 1');
     this.physics.enable(layer, Phaser.Physics.ARCADE);
-    map.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
+    mapOne.setCollisionBetween(1, 100000, true, 'Tile Layer 1');
     layer.resizeWorld();
 
     this.bear = new Bear(this.game, 900, 500);
@@ -156,7 +156,7 @@ Game.prototype = {
     this.lake = new Lake(this.game, 0, 565, 12600, 70);
     this.game.add.existing(this.lake);
 
-    snowFlakes = this.add.emitter(this.world.centerX, 0, 25);
+    snowFlakes = this.add.emitter(this.world.centerX, 0, 1000);
     snowFlakes.makeParticles('snowFlakes');
     this.makeSnow(snowFlakes);
 
@@ -164,7 +164,7 @@ Game.prototype = {
     snow.makeParticles('snow');
     this.makeSnow(snow);
 
-    hardRain = this.add.emitter(this.world.centerX, 0, 60);
+    hardRain = this.add.emitter(this.world.centerX, 0, 100);
     this.makeRain(hardRain);
 
     iceBergs = this.game.add.group();
@@ -172,17 +172,16 @@ Game.prototype = {
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
 
     // for (var i = 0; i < 1; i++){
-    iceBergs.add(new Iceberg(this.game, 1250, 450));
+    iceBergs.add(new Iceberg(this.game, 1475, 50));
     iceBergs.add(new Iceberg(this.game, 2350, 50));
-    iceBergs.add(new Iceberg(this.game, 2570, 50));
     iceBergs.add(new Iceberg(this.game, 3250, 50));
-    iceBergs.add(new Iceberg(this.game, 4750, 50));
+    iceBergs.add(new Iceberg(this.game, 4550, 50));
     iceBergs.add(new Iceberg(this.game, 5250, 50));
-    iceBergs.add(new Iceberg(this.game, 5550, 50));
+    iceBergs.add(new Iceberg(this.game, 5650, 50));
     iceBergs.add(new Iceberg(this.game, 6250, 50));
     iceBergs.add(new Iceberg(this.game, 6850, 50));
-    iceBergs.add(new Iceberg(this.game, 9850, 50));
-    iceBergs.add(new Iceberg(this.game, 11230, 50));
+    iceBergs.add(new Iceberg(this.game, 9050, 50));
+    iceBergs.add(new Iceberg(this.game, 10450, 50));
     // }
 
     chaser = this.add.sprite(0, 0, 'chaser');
@@ -193,12 +192,12 @@ Game.prototype = {
 
     pole = this.add.sprite( 12250, 200, 'pole');
     this.game.physics.enable(pole, Phaser.Physics.ARCADE);
-	},
+  },
 
-	update : function() {
-		var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
+  update : function() {
+    var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
-		this.game.physics.arcade.collide(this.bear, layer);
+    this.game.physics.arcade.collide(this.bear, layer);
     this.game.physics.arcade.collide(this.bear, hardRain);
     this.game.physics.arcade.collide(pole, layer);
     this.game.physics.arcade.collide(layer, iceBergs);
@@ -247,11 +246,11 @@ Game.prototype = {
       }
 
       if (this.game.physics.arcade.overlap(this.bear, chaser)) {
-      	this.bear.die();
+        this.bear.die();
       }
 
       if (this.game.physics.arcade.overlap(this.bear, pole)) {
-      	this.bear.win();
+        this.bear.win();
       }
 
     if (cursors.left.isDown) {
@@ -274,5 +273,5 @@ Game.prototype = {
         this.bear.jump();
         jumpSfx.play('',0,1,false,false);
     }
-	}
+  }
 };
