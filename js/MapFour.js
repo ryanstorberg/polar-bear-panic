@@ -194,7 +194,7 @@ MapFour.prototype = {
   },
 
   update : function() {
-    var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
+    // var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
     this.game.physics.arcade.collide(this.bear, layer);
     this.game.physics.arcade.collide(this.bear, hardRain);

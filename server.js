@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var Firebase = require("firebase");
+// var Firebase = require("firebase");
 // var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
 app.get("/", function(req, res) {
