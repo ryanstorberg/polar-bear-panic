@@ -3,9 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
     <title>Polar Bear Panic</title>
-
     <link rel="stylesheet" href="assets/stylesheets/style.css">
-
     <script type="text/javascript" src="js/phaser.min.js"></script>
     <script src="js/Preloader.js"></script>
     <script src="js/MainMenu.js"></script>
@@ -16,13 +14,12 @@
     <script src="js/MapFour.js"></script>
     <script src="js/Over.js"></script>
     <script src="js/Instructions.js"></script>
-    <script src= "js/Multiplayer.js"></script>
+    <script src="js/Multiplayer.js"></script>
     <script src="js/Levels.js"></script>
     <script src="js/AboutUs.js"></script>
-
 </head>
 <body>
-    <div id = "game">
+    <div id="game">
         <script>
         (function() {
             var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
@@ -34,7 +31,6 @@
             game.state.add('MapTwo', MapTwo);
             game.state.add('MapThree', MapThree);
             game.state.add('MapFour', MapFour);
-            game.state.add('Game', Game);
             game.state.add('Instructions', Instructions);
             game.state.add('Over', Over);
             game.state.start('Preloader');
@@ -43,5 +39,3 @@
     </div>
 </body>
 </html>
-
-
