@@ -170,8 +170,6 @@ MapTwo.prototype = {
     iceBergs = this.game.add.group();
     iceBergs.enableBody = true;
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
-
-    // for (var i = 0; i < 1; i++){
     iceBergs.add(new Iceberg(this.game, 1475, 50));
     iceBergs.add(new Iceberg(this.game, 2350, 50));
     iceBergs.add(new Iceberg(this.game, 3250, 50));
@@ -182,7 +180,6 @@ MapTwo.prototype = {
     iceBergs.add(new Iceberg(this.game, 6850, 50));
     iceBergs.add(new Iceberg(this.game, 9050, 50));
     iceBergs.add(new Iceberg(this.game, 10450, 50));
-    // }
 
     chaser = this.add.sprite(0, 0, 'chaser');
     this.chase(chaser);
@@ -195,7 +192,6 @@ MapTwo.prototype = {
   },
 
   update : function() {
-    // var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 
     this.game.physics.arcade.collide(this.bear, layer);
     this.game.physics.arcade.collide(this.bear, hardRain);

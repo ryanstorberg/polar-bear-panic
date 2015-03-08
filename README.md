@@ -8,5 +8,4 @@ Polar Bear Panic!
 - [Ryan Storberg](https://github.com/ryanstorberg)
 
 
-Polar Bear Panic is a 2Dside-scroller where you play as a polar bear escaping the devastating effects of global warming.
-Dodge flying fish, avoid treacherous icebergs, and stay out of the freezing arctic water!
+Polar Bear Panic is a 2Dside-scroller where you play as a polar bear escaping the devastating effects of global warming. Dodge flying fish, avoid treacherous icebergs, and stay out of the freezing arctic water!

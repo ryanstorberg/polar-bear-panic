@@ -170,7 +170,6 @@ MapFour.prototype = {
     iceBergs = this.game.add.group();
     iceBergs.enableBody = true;
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
-
     iceBergs.add(new Iceberg(this.game, 1250, 450));
     iceBergs.add(new Iceberg(this.game, 2350, 50));
     iceBergs.add(new Iceberg(this.game, 2570, 50));
@@ -194,8 +193,6 @@ MapFour.prototype = {
   },
 
   update : function() {
-    // var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
-
     this.game.physics.arcade.collide(this.bear, layer);
     this.game.physics.arcade.collide(this.bear, hardRain);
     this.game.physics.arcade.collide(pole, layer);

@@ -1,4 +1,3 @@
-
 Preloader = function(game) {};
 
 Preloader.prototype = {
@@ -12,7 +11,6 @@ Preloader.prototype = {
         this.game.load.image('map2', 'assets/map2.png');
         this.game.load.image('map3', 'assets/map3.png');
         this.game.load.image('map4', 'assets/map4.png');
-
 		this.game.load.image('sky', 'assets/sky2.png');
     	this.game.load.image('kenney', 'assets/kenney.png');
     	this.game.load.tilemap('mapOne', 'assets/map1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -28,17 +26,12 @@ Preloader.prototype = {
     	this.game.load.spritesheet('chaser', 'assets/sunKill6.png', 600, 700);
         this.game.load.spritesheet('pole', 'assets/northPole.png', 25, 200);
         this.game.load.spritesheet('warmth', 'assets/bigTransparentcircle.png', 1400, 700);
-
         this.game.load.audio('jump1', ['assets/jump1.mp3']);
         this.game.load.audio('fish', ['assets/fishslap1.mp3']);
         this.game.load.audio('music', ['assets/chibiNinja.mp3']);
-
-
 	},
 
 	create: function() {
 		this.game.state.start('MainMenu');
-        // var Firebase = require("firebase");
-        // var playerLocations = new Firebase("https://fiery-inferno-6891.firebaseio.com");
 	}
 };
