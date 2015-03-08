@@ -1,9 +1,8 @@
 {
   "name": "polar-bear-panic",
-  "version": "0.5.0",
+  "version": "0.1.0",
   "description": "Multiplayer Platformer",
   "main": "server.js",
-  "version": "0.0.1",
   "dependencies": {
     "express": "^4.8.7"
   },
