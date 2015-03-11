@@ -12,6 +12,7 @@ MapFour = function(game) {
   var jumpSfx;
   var fishSfx;
   var musicSfx;
+  var playerStarted = false;
 };
 
 var Lake = function(game, x, y, width, height) {
@@ -63,14 +64,14 @@ Bear.prototype.stop = function(){
 };
 
 Bear.prototype.die = function(){
-  this.game.add.text(this.position.x, 300, 'YOU DIED!\n    :(', { fill: '#ffffff' });
+  this.game.add.text(this.position.x, 300, 'You Died!', { fill: '#ffffff' });
   this.kill();
   this.game.state.start("Over");
   musicSfx.stop();
 };
 
 Bear.prototype.win = function(){
-    this.game.add.text(this.position.x, 300, 'You Made It!\n    :)', { fill: '#ffffff' });
+    this.game.add.text(this.position.x, 300, 'You Made It!', { fill: '#ffffff' });
     this.game.state.start("Over");
     musicSfx.stop();
 };
@@ -97,9 +98,9 @@ MapFour.prototype = {
   makeSnow: function(object) {
     object.width = this.world.width;
     object.minParticleScale = 0.1;
-    object.maxParticleScale = 0.5;
+    object.maxParticleScale = 0.2;
     object.setYSpeed(300, 500);
-    object.setXSpeed(-500, -1000);
+    object.setXSpeed(500, 1000);
     object.minRotation = 0;
     object.maxRotation = 0;
     object.start(false, 1600, 5, 0);
@@ -110,7 +111,7 @@ MapFour.prototype = {
     object.width = this.world.width;
     object.makeParticles('fish');
     object.setYSpeed(300, 500);
-    object.setXSpeed(-500, -1000);
+    object.setXSpeed(500, 1000);
     object.minRotation = 360;
     object.maxRotation = 90;
     object.start(false, 1600, 5, 0);
@@ -150,7 +151,7 @@ MapFour.prototype = {
     mapFour.setCollisionBetween(1, 100000, true, 'Tile Layer 4');
     layer.resizeWorld();
 
-    this.bear = new Bear(this.game, 900, 500);
+    this.bear = new Bear(this.game, 1000, 500);
     this.game.add.existing(this.bear);
 
     this.lake = new Lake(this.game, 0, 565, 12600, 70);
@@ -160,17 +161,16 @@ MapFour.prototype = {
     snowFlakes.makeParticles('snowFlakes');
     this.makeSnow(snowFlakes);
 
-    snow = this.add.emitter(this.world.centerX, 0, 1000);
+    snow = this.add.emitter(this.world.centerX, 0, 100);
     snow.makeParticles('snow');
     this.makeSnow(snow);
 
-    hardRain = this.add.emitter(this.world.centerX, 0, 60);
+    hardRain = this.add.emitter(this.world.centerX, 0, 10);
     this.makeRain(hardRain);
 
     iceBergs = this.game.add.group();
     iceBergs.enableBody = true;
     iceBergs.physicsBodyType = Phaser.Physics.ARCADE;
-    iceBergs.add(new Iceberg(this.game, 1250, 450));
     iceBergs.add(new Iceberg(this.game, 2350, 50));
     iceBergs.add(new Iceberg(this.game, 2570, 50));
     iceBergs.add(new Iceberg(this.game, 3250, 50));
@@ -198,10 +198,16 @@ MapFour.prototype = {
     this.game.physics.arcade.collide(pole, layer);
     this.game.physics.arcade.collide(layer, iceBergs);
 
-    globalWarmingSpeed = 300;
+    globalWarmingSpeed = 325;
 
-    chaser.body.velocity.x = globalWarmingSpeed;
-    warmth.body.velocity.x = globalWarmingSpeed;
+    if(this.playerStarted) {
+      chaser.body.velocity.x = globalWarmingSpeed;
+      warmth.body.velocity.x = globalWarmingSpeed;
+    } else {
+      if(cursors.right.isDown) {
+        this.playerStarted = true;
+      }
+    }
 
     if (this.game.physics.arcade.collide(this.bear, hardRain)) {
       fishSfx.play('',0,1,false,false);
@@ -243,6 +249,7 @@ MapFour.prototype = {
 
       if (this.game.physics.arcade.overlap(this.bear, chaser)) {
         this.bear.die();
+        this.playerStarted = false;
       }
 
       if (this.game.physics.arcade.overlap(this.bear, pole)) {
